@@ -47,8 +47,8 @@
     </el-form-item>
     <el-form-item label="图片">
       <el-upload
-        action="http://localhost:8088/file"
-        name="img"
+        action="http://localhost:8088/file/upload"
+        name="file"
         drag
         :multiple="false"
         :limit="1"
@@ -128,10 +128,10 @@ export default {
   },
   methods: {
     handleReset () {
-      this.name = ''
-      this.price = null
-      this.inventory = null
-      this.categories = []
+      this.form.name = ''
+      this.form.price = null
+      this.form.inventory = null
+      this.form.categories = []
       this.imgUrl = ''
     },
     handleAddCommodity () {
@@ -157,7 +157,7 @@ export default {
               price: this.commodityForm.price,
               inventory: this.commodityForm.inventory,
               storeId: this.storeId,
-              uuid: this.commodityForm.uuid,
+              imageUUID: this.commodityForm.uuid,
               categories: arr
             }
           }).then(response => {
