@@ -44,6 +44,7 @@ export default {
         }
         case 'logout': {
           this.$router.push('/login')
+          break
         }
       }
     }
@@ -52,10 +53,10 @@ export default {
 </script>
 
 <style scoped>
-  .header-container {
-    display: flex;
-    height: 60px;
-    justify-content: space-between;
-    align-items: center;
-  }
+.header-container {
+  display: flex;
+  height: 60px;
+  justify-content: space-between;
+  align-items: center;
+}
 </style>
