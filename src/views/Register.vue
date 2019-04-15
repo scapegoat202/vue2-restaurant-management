@@ -1,6 +1,8 @@
 <template>
   <el-container style="align-items: center">
-    <el-header><h3>扫码点单管理系统注册</h3></el-header>
+    <el-header>
+      <h3>扫码点单管理系统注册</h3>
+    </el-header>
     <el-main class="register-form-container">
       <el-form
         ref="registerForm"
@@ -121,7 +123,34 @@
         >
           <el-input v-model="form.address.details" />
         </el-form-item>
-        <el-form-item align="center">
+        <el-form-item
+          label="店铺LOGO"
+          prop="logo"
+        >
+          <el-upload
+            action="http://localhost:8088/file/upload"
+            name="file"
+            drag
+            :multiple="false"
+            :limit="1"
+            :on-success="onSuccess"
+            :on-change="onChange"
+            :on-error="onError"
+            style="alignment: center"
+          >
+            <img
+              v-if="imgUrl"
+              class="image"
+              :src="imgUrl"
+              alt="商品图片"
+            >
+            <i
+              v-else
+              class="el-icon-plus image-uploader-icon"
+            />
+          </el-upload>
+        </el-form-item>
+        <el-form-item style="alignment: center">
           <el-button
             type="primary"
             @click="validateForm('registerForm')"
@@ -157,7 +186,8 @@ export default {
           city: '',
           county: '',
           details: ''
-        }
+        },
+        imageUUID: ''
       },
       rules: {
         username: [{ required: true, message: '必填项', trigger: 'blur' }],
@@ -167,7 +197,8 @@ export default {
       addressRules: {
         province: [{ required: true, message: '必选项', trigger: 'blur' }],
         city: [{ required: true, message: '必选项', trigger: 'blur' }]
-      }
+      },
+      imgUrl: ''
     }
   },
   computed: {
@@ -214,7 +245,8 @@ export default {
               city: this.form.address.city,
               county: this.form.address.county,
               details: this.form.address.details
-            }
+            },
+            imageUUID: this.form.imageUUID
           }
         })
         if (response.status === 201) {
@@ -245,6 +277,22 @@ export default {
           this.submitForm()
         }
       })
+    },
+    onSuccess (response, file) {
+      this.imgUrl = URL.createObjectURL(file.raw)
+      console.log(file)
+      this.form.imageUUID = response
+      this.$message.success('图片上传成功')
+    },
+    onError () {
+      this.$message.error('图片上传失败')
+      this.form.imageUUID = null
+    },
+    onChange (file, fileList) {
+      if (fileList.length === 0) {
+        this.imageUrl = ''
+        this.form.imageUUID = null
+      }
     }
   }
 }
@@ -263,5 +311,8 @@ export default {
 .locale-align {
   display: flex;
   justify-content: space-between;
+}
+.image {
+  height: 178px;
 }
 </style>
